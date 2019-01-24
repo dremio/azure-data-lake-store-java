@@ -33,14 +33,16 @@ public class TestPositionedReads {
         AzureADToken aadToken;
 
         prop = HelperUtils.getProperties();
-        aadToken = AzureADAuthenticator.getTokenUsingClientCreds(prop.getProperty("OAuth2TokenUrl"),
-        prop.getProperty("ClientId"),
-        prop.getProperty("ClientSecret") );
-        UUID guid = UUID.randomUUID();
-        directory = "/" + prop.getProperty("dirName", "unitTests") + "/" + UUID.randomUUID();
-        String account = prop.getProperty("StoreAcct") + ".azuredatalakestore.net";
-        client = ADLStoreClient.createClient(account, aadToken);
         testsEnabled = Boolean.parseBoolean(prop.getProperty("PositionedReadsTestsEnabled", "true"));
+        if (testsEnabled) {
+            aadToken = AzureADAuthenticator.getTokenUsingClientCreds(prop.getProperty("OAuth2TokenUrl"),
+                    prop.getProperty("ClientId"),
+                    prop.getProperty("ClientSecret"));
+            UUID guid = UUID.randomUUID();
+            directory = "/" + prop.getProperty("dirName", "unitTests") + "/" + UUID.randomUUID();
+            String account = prop.getProperty("StoreAcct") + ".azuredatalakestore.net";
+            client = ADLStoreClient.createClient(account, aadToken);
+        }
     }
 
     @Test

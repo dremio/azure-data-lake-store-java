@@ -35,14 +35,16 @@ public class TestFileSdk {
     @BeforeClass
     public static void setup() throws IOException {
         Properties prop = HelperUtils.getProperties();
-        AzureADToken aadToken = AzureADAuthenticator.getTokenUsingClientCreds(prop.getProperty("OAuth2TokenUrl"),
-                prop.getProperty("ClientId"),
-                prop.getProperty("ClientSecret") );
-        UUID guid = UUID.randomUUID();
-        directory = "/" + prop.getProperty("dirName") + "/" + UUID.randomUUID();
-        String account = prop.getProperty("StoreAcct") + ".azuredatalakestore.net";
-        client = ADLStoreClient.createClient(account, aadToken.accessToken);
         testsEnabled = Boolean.parseBoolean(prop.getProperty("SdkTestsEnabled", "true"));
+        if (testsEnabled) {
+            AzureADToken aadToken = AzureADAuthenticator.getTokenUsingClientCreds(prop.getProperty("OAuth2TokenUrl"),
+                    prop.getProperty("ClientId"),
+                    prop.getProperty("ClientSecret"));
+            UUID guid = UUID.randomUUID();
+            directory = "/" + prop.getProperty("dirName") + "/" + UUID.randomUUID();
+            String account = prop.getProperty("StoreAcct") + ".azuredatalakestore.net";
+            client = ADLStoreClient.createClient(account, aadToken.accessToken);
+        }
     }
 
     @Test

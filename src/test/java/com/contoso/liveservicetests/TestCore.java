@@ -41,14 +41,16 @@ public class TestCore {
     @BeforeClass
     public static void setup() throws IOException {
         prop = HelperUtils.getProperties();
-        aadToken = AzureADAuthenticator.getTokenUsingClientCreds(prop.getProperty("OAuth2TokenUrl"),
-                                                                 prop.getProperty("ClientId"),
-                                                                 prop.getProperty("ClientSecret") );
-        UUID guid = UUID.randomUUID();
-        directory = "/" + prop.getProperty("dirName") + "/" + UUID.randomUUID();
-        String account = prop.getProperty("StoreAcct") + ".azuredatalakestore.net";
-        client = ADLStoreClient.createClient(account, aadToken);
         testsEnabled = Boolean.parseBoolean(prop.getProperty("CoreTestsEnabled", "true"));
+        if (testsEnabled) {
+            aadToken = AzureADAuthenticator.getTokenUsingClientCreds(prop.getProperty("OAuth2TokenUrl"),
+                                                                     prop.getProperty("ClientId"),
+                                                                     prop.getProperty("ClientSecret") );
+            UUID guid = UUID.randomUUID();
+            directory = "/" + prop.getProperty("dirName") + "/" + UUID.randomUUID();
+            String account = prop.getProperty("StoreAcct") + ".azuredatalakestore.net";
+            client = ADLStoreClient.createClient(account, aadToken);
+        }
     }
 
     @AfterClass
