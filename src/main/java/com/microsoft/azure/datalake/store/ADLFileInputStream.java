@@ -235,8 +235,11 @@ public class ADLFileInputStream extends InputStream {
         //reset buffer to initial state - i.e., throw away existing data
         bCursor = 0;
         limit = 0;
-        buffer.clear();
-        if (!isBufferAllocated()) allocateBuffer(blocksize);
+        if (!isBufferAllocated()) {
+            allocateBuffer(blocksize);
+        } else {
+            buffer.clear();
+        }
 
         int bytesRead = readInternal(fCursor, buffer.getAsByteArray(), buffer.getAsByteBuffer(),
                 0, blocksize, client.isUsingOffHeapMemory());
